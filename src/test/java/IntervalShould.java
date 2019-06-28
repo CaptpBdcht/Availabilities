@@ -15,94 +15,92 @@ public class IntervalShould {
     private final Date seventhFebruaryAtFourteen = format.parse("2016 7 2 14 00");
     private final Date seventhFebruaryAtSeventeen = format.parse("2016 7 2 17 00");
 
-    private Date startDate = null;
-    private Date endDate = null;
-
     public IntervalShould() throws ParseException {
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void
-    not_create_if_start_is_null() throws ParseException {
-        endDate = seventhFebruaryAtSix;
-        Interval it = new Interval(null, endDate);
+    not_create_if_start_is_null() {
+        new Interval(null, seventhFebruaryAtSix);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void
-    not_create_if_end_is_null() throws ParseException {
-        startDate = seventhFebruaryAtSix;
-        Interval it = new Interval(startDate, null);
+    not_create_if_end_is_null() {
+        new Interval(seventhFebruaryAtSix, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void
-    not_create_if_start_after_end() throws ParseException {
-        startDate = seventhFebruaryAtSeventeen;
-        endDate = seventhFebruaryAtSix;
-        Interval it = new Interval(startDate, endDate);
+    not_create_if_start_after_end() {
+        new Interval(
+            seventhFebruaryAtSeventeen,
+            seventhFebruaryAtSix
+        );
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void
-    not_create_if_start_equals_end() throws ParseException {
-        startDate = seventhFebruaryAtFourteen;
-        endDate = seventhFebruaryAtFourteen;
-        Interval it = new Interval(startDate, endDate);
+    not_create_if_start_equals_end() {
+        new Interval(
+            seventhFebruaryAtFourteen,
+            seventhFebruaryAtFourteen
+        );
     }
 
     @Test()
     public void
-    create_when_given_valid_dates() throws ParseException {
-        startDate = seventhFebruaryAtSix;
-        endDate = seventhFebruaryAtTwelve;
-        Interval it = new Interval(startDate, endDate);
+    create_when_given_valid_dates() {
+        new Interval(
+            seventhFebruaryAtSix,
+            seventhFebruaryAtTwelve
+        );
     }
 
     @Test()
     public void
-    return_false_for_disjoint_intervals() throws ParseException {
+    return_false_for_disjoint_intervals() {
         Interval first = new Interval(
-                seventhFebruaryAtSix,
-                seventhFebruaryAtTen
+            seventhFebruaryAtSix,
+            seventhFebruaryAtTen
         );
         Interval second = new Interval(
-                seventhFebruaryAtFourteen,
-                seventhFebruaryAtSeventeen
+            seventhFebruaryAtFourteen,
+            seventhFebruaryAtSeventeen
         );
         assertFalse(Interval.doesIntersect(first, second));
     }
 
     @Test()
     public void
-    return_true_for_intersecting_intervals() throws ParseException {
+    return_true_for_intersecting_intervals() {
         Interval interval = new Interval(
-                seventhFebruaryAtTen,
-                seventhFebruaryAtTwelve
+            seventhFebruaryAtTen,
+            seventhFebruaryAtTwelve
         );
         assertTrue(Interval.doesIntersect(interval, interval));
     }
 
     @Test()
     public void
-    return_intersection_of_disjoint_intervals() throws ParseException {
+    return_intersection_of_disjoint_intervals() {
         Interval first = new Interval(
-                seventhFebruaryAtSix,
-                seventhFebruaryAtTen
+            seventhFebruaryAtSix,
+            seventhFebruaryAtTen
         );
         Interval second = new Interval(
-                seventhFebruaryAtFourteen,
-                seventhFebruaryAtSeventeen
+            seventhFebruaryAtFourteen,
+            seventhFebruaryAtSeventeen
         );
         assertNull(Interval.intersection(first, second));
     }
 
     @Test()
     public void
-    return_intersection_of_same_interval() throws ParseException {
+    return_intersection_of_same_interval() {
         Interval first = new Interval(
-                seventhFebruaryAtTen,
-                seventhFebruaryAtTwelve
+            seventhFebruaryAtTen,
+            seventhFebruaryAtTwelve
         );
         Interval intersection = Interval.intersection(first, first);
         if (intersection != null) {
@@ -113,18 +111,18 @@ public class IntervalShould {
 
     @Test()
     public void
-    return_intersection_of_intervals_intersecting_on_left() throws ParseException {
+    return_intersection_of_intervals_intersecting_on_left() {
         Interval first = new Interval(
-                seventhFebruaryAtTen,
-                seventhFebruaryAtFourteen
+            seventhFebruaryAtTen,
+            seventhFebruaryAtFourteen
         );
         Interval left = new Interval(
-                seventhFebruaryAtSix,
-                seventhFebruaryAtTwelve
+            seventhFebruaryAtSix,
+            seventhFebruaryAtTwelve
         );
         Interval expected = new Interval(
-                seventhFebruaryAtTen,
-                seventhFebruaryAtTwelve
+            seventhFebruaryAtTen,
+            seventhFebruaryAtTwelve
         );
         Interval intersection = Interval.intersection(first, left);
         if (intersection != null) {
@@ -135,18 +133,18 @@ public class IntervalShould {
 
     @Test()
     public void
-    return_intersection_of_intervals_intersecting_on_right() throws ParseException {
+    return_intersection_of_intervals_intersecting_on_right() {
         Interval first = new Interval(
-                seventhFebruaryAtTen,
-                seventhFebruaryAtFourteen
+            seventhFebruaryAtTen,
+            seventhFebruaryAtFourteen
         );
         Interval right = new Interval(
-                seventhFebruaryAtTwelve,
-                seventhFebruaryAtSeventeen
+            seventhFebruaryAtTwelve,
+            seventhFebruaryAtSeventeen
         );
         Interval expected = new Interval(
-                seventhFebruaryAtTwelve,
-                seventhFebruaryAtFourteen
+            seventhFebruaryAtTwelve,
+            seventhFebruaryAtFourteen
         );
         Interval intersection = Interval.intersection(first, right);
         if (intersection != null) {
@@ -157,14 +155,14 @@ public class IntervalShould {
 
     @Test()
     public void
-    return_intersection_of_intervals_intersecting_inside() throws ParseException {
+    return_intersection_of_intervals_intersecting_inside() {
         Interval first = new Interval(
-                seventhFebruaryAtSix,
-                seventhFebruaryAtSeventeen
+            seventhFebruaryAtSix,
+            seventhFebruaryAtSeventeen
         );
         Interval inside = new Interval(
-                seventhFebruaryAtTen,
-                seventhFebruaryAtFourteen
+            seventhFebruaryAtTen,
+            seventhFebruaryAtFourteen
         );
         Interval intersection = Interval.intersection(first, inside);
         if (intersection != null) {
@@ -175,14 +173,14 @@ public class IntervalShould {
 
     @Test()
     public void
-    return_disjunctive_union_of_disjoint_intervals() throws ParseException {
+    return_disjunctive_union_of_disjoint_intervals() {
         Interval first = new Interval(
-                seventhFebruaryAtSix,
-                seventhFebruaryAtTen
+            seventhFebruaryAtSix,
+            seventhFebruaryAtTen
         );
         Interval second = new Interval(
-                seventhFebruaryAtFourteen,
-                seventhFebruaryAtSeventeen
+            seventhFebruaryAtFourteen,
+            seventhFebruaryAtSeventeen
         );
         List<Interval> intervals = Interval.leftDisjunctiveUnion(first, second);
         assertEquals(intervals.size(), 1);
@@ -192,18 +190,18 @@ public class IntervalShould {
 
     @Test()
     public void
-    return_disjunctive_union_of_intervals_intersecting_left() throws ParseException {
+    return_disjunctive_union_of_intervals_intersecting_left() {
         Interval first = new Interval(
-                seventhFebruaryAtTen,
-                seventhFebruaryAtFourteen
+            seventhFebruaryAtTen,
+            seventhFebruaryAtFourteen
         );
         Interval left = new Interval(
-                seventhFebruaryAtSix,
-                seventhFebruaryAtTwelve
+            seventhFebruaryAtSix,
+            seventhFebruaryAtTwelve
         );
         Interval expected = new Interval(
-                seventhFebruaryAtTwelve,
-                seventhFebruaryAtFourteen
+            seventhFebruaryAtTwelve,
+            seventhFebruaryAtFourteen
         );
         List<Interval> intervals = Interval.leftDisjunctiveUnion(first, left);
         assertEquals(intervals.size(), 1);
@@ -213,18 +211,18 @@ public class IntervalShould {
 
     @Test()
     public void
-    return_disjunctive_union_of_intervals_intersecting_right() throws ParseException {
+    return_disjunctive_union_of_intervals_intersecting_right() {
         Interval first = new Interval(
-                seventhFebruaryAtTen,
-                seventhFebruaryAtFourteen
+            seventhFebruaryAtTen,
+            seventhFebruaryAtFourteen
         );
         Interval right = new Interval(
-                seventhFebruaryAtTwelve,
-                seventhFebruaryAtSeventeen
+            seventhFebruaryAtTwelve,
+            seventhFebruaryAtSeventeen
         );
         Interval expected = new Interval(
-                seventhFebruaryAtTen,
-                seventhFebruaryAtTwelve
+            seventhFebruaryAtTen,
+            seventhFebruaryAtTwelve
         );
         List<Interval> intervals = Interval.leftDisjunctiveUnion(first, right);
         assertEquals(intervals.size(), 1);
@@ -234,22 +232,22 @@ public class IntervalShould {
 
     @Test()
     public void
-    return_disjunctive_union_of_intervals_intersecting_inside() throws ParseException {
+    return_disjunctive_union_of_intervals_intersecting_inside() {
         Interval first = new Interval(
-                seventhFebruaryAtSix,
-                seventhFebruaryAtSeventeen
+            seventhFebruaryAtSix,
+            seventhFebruaryAtSeventeen
         );
         Interval right = new Interval(
-                seventhFebruaryAtTen,
-                seventhFebruaryAtFourteen
+            seventhFebruaryAtTen,
+            seventhFebruaryAtFourteen
         );
         Interval firstExpected = new Interval(
-                seventhFebruaryAtSix,
-                seventhFebruaryAtTen
+            seventhFebruaryAtSix,
+            seventhFebruaryAtTen
         );
         Interval secondExpected = new Interval(
-                seventhFebruaryAtFourteen,
-                seventhFebruaryAtSeventeen
+            seventhFebruaryAtFourteen,
+            seventhFebruaryAtSeventeen
         );
         List<Interval> intervals = Interval.leftDisjunctiveUnion(first, right);
         assertEquals(intervals.size(), 2);
