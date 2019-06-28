@@ -3,7 +3,6 @@ package schedule;
 import events.Event;
 import events.NonRecurringOpeningEvent;
 import interval.Interval;
-import schedule.Schedule;
 import helpers.DateHelper;
 import org.junit.Before;
 import org.junit.BeforeClass;

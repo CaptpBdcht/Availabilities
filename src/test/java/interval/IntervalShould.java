@@ -1,6 +1,5 @@
 package interval;
 
-import interval.Interval;
 import helpers.DateHelper;
 import org.junit.Test;
 
@@ -22,17 +21,20 @@ public class IntervalShould {
     public IntervalShould() throws ParseException {
     }
 
-    @Test(expected = IllegalArgumentException.class) public void
+    @Test(expected = IllegalArgumentException.class)
+    public void
     not_create_if_start_is_null() {
         new Interval(null, seventhFebruaryAtSix);
     }
 
-    @Test(expected = IllegalArgumentException.class) public void
+    @Test(expected = IllegalArgumentException.class)
+    public void
     not_create_if_end_is_null() {
         new Interval(seventhFebruaryAtSix, null);
     }
 
-    @Test(expected = IllegalArgumentException.class) public void
+    @Test(expected = IllegalArgumentException.class)
+    public void
     not_create_if_start_after_end() {
         new Interval(
             seventhFebruaryAtSeventeen,
@@ -40,7 +42,8 @@ public class IntervalShould {
         );
     }
 
-    @Test(expected = IllegalArgumentException.class) public void
+    @Test(expected = IllegalArgumentException.class)
+    public void
     not_create_if_start_equals_end() {
         new Interval(
             seventhFebruaryAtFourteen,
@@ -48,7 +51,8 @@ public class IntervalShould {
         );
     }
 
-    @Test() public void
+    @Test()
+    public void
     create_when_given_valid_dates() {
         new Interval(
             seventhFebruaryAtSix,
@@ -56,7 +60,8 @@ public class IntervalShould {
         );
     }
 
-    @Test() public void
+    @Test()
+    public void
     return_false_for_disjoint_intervals() {
         Interval first = new Interval(
             seventhFebruaryAtSix,
@@ -69,7 +74,8 @@ public class IntervalShould {
         assertFalse(Interval.doesIntersect(first, second));
     }
 
-    @Test() public void
+    @Test()
+    public void
     return_true_for_intersecting_intervals() {
         Interval interval = new Interval(
             seventhFebruaryAtTen,
@@ -78,7 +84,8 @@ public class IntervalShould {
         assertTrue(Interval.doesIntersect(interval, interval));
     }
 
-    @Test() public void
+    @Test()
+    public void
     return_intersection_of_disjoint_intervals() {
         Interval first = new Interval(
             seventhFebruaryAtSix,
@@ -91,7 +98,8 @@ public class IntervalShould {
         assertNull(Interval.intersection(first, second));
     }
 
-    @Test() public void
+    @Test()
+    public void
     return_intersection_of_same_interval() {
         Interval first = new Interval(
             seventhFebruaryAtTen,
@@ -104,7 +112,8 @@ public class IntervalShould {
         }
     }
 
-    @Test() public void
+    @Test()
+    public void
     return_intersection_of_intervals_intersecting_on_left() {
         Interval first = new Interval(
             seventhFebruaryAtTen,
@@ -125,7 +134,8 @@ public class IntervalShould {
         }
     }
 
-    @Test() public void
+    @Test()
+    public void
     return_intersection_of_intervals_intersecting_on_right() {
         Interval first = new Interval(
             seventhFebruaryAtTen,
@@ -146,7 +156,8 @@ public class IntervalShould {
         }
     }
 
-    @Test() public void
+    @Test()
+    public void
     return_intersection_of_intervals_intersecting_inside() {
         Interval first = new Interval(
             seventhFebruaryAtSix,
@@ -163,7 +174,8 @@ public class IntervalShould {
         }
     }
 
-    @Test() public void
+    @Test()
+    public void
     return_disjunctive_union_of_disjoint_intervals() {
         Interval first = new Interval(
             seventhFebruaryAtSix,
@@ -179,7 +191,8 @@ public class IntervalShould {
         assertEquals(intervals.get(0).getEnd(), seventhFebruaryAtTen);
     }
 
-    @Test() public void
+    @Test()
+    public void
     return_disjunctive_union_of_intervals_intersecting_left() {
         Interval first = new Interval(
             seventhFebruaryAtTen,
@@ -199,7 +212,8 @@ public class IntervalShould {
         assertEquals(intervals.get(0).getEnd(), expected.getEnd());
     }
 
-    @Test() public void
+    @Test()
+    public void
     return_disjunctive_union_of_intervals_intersecting_right() {
         Interval first = new Interval(
             seventhFebruaryAtTen,
@@ -219,7 +233,8 @@ public class IntervalShould {
         assertEquals(intervals.get(0).getEnd(), expected.getEnd());
     }
 
-    @Test() public void
+    @Test()
+    public void
     return_disjunctive_union_of_intervals_intersecting_inside() {
         Interval first = new Interval(
             seventhFebruaryAtSix,

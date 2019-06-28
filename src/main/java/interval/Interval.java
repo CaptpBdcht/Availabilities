@@ -2,7 +2,10 @@ package interval;
 
 import helpers.DateHelper;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 public class Interval {
     private Date start;
