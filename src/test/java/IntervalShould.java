@@ -5,8 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class IntervalShould {
     private final SimpleDateFormat format = new SimpleDateFormat("y M D H m");
@@ -55,6 +54,30 @@ public class IntervalShould {
         startDate = format.parse(seventhFebruaryAtSixThirty);
         endDate = format.parse(seventhFebruaryAtTwelve);
         Interval it = new Interval(startDate, endDate);
+    }
+
+    @Test()
+    public void
+    return_false_for_disjoint_intervals() throws ParseException {
+        Interval first = new Interval(
+                format.parse(seventhFebruaryAtSixThirty),
+                format.parse(seventhFebruaryAtTenThirty)
+        );
+        Interval second = new Interval(
+                format.parse(seventhFebruaryAtFourteen),
+                format.parse(seventhFebruaryAtSeventeen)
+        );
+        assertFalse(Interval.doesIntersect(first, second));
+    }
+
+    @Test()
+    public void
+    return_true_for_intersecting_intervals() throws ParseException {
+        Interval interval = new Interval(
+                format.parse(seventhFebruaryAtTenThirty),
+                format.parse(seventhFebruaryAtTwelve)
+        );
+        assertTrue(Interval.doesIntersect(interval, interval));
     }
 
     @Test()
