@@ -9,7 +9,6 @@ class Event {
     static class Builder {
         private boolean opening;
         private boolean recurring;
-
         private Date startDate;
         private Date endDate;
 
@@ -18,7 +17,7 @@ class Event {
             return this;
         }
 
-        Builder withRecuring(boolean recurring) {
+        Builder withRecurring(boolean recurring) {
             this.recurring = recurring;
             return this;
         }
@@ -45,20 +44,32 @@ class Event {
         this.interval = interval;
     }
 
-    public boolean isOpening() {
+    private boolean isOpening() {
         return opening;
     }
 
-    public boolean isRecurring() {
+    private boolean isRecurring() {
         return recurring;
     }
 
-    public Interval getInterval() {
+    Interval getInterval() {
         return interval;
     }
 
-    static String availabilitiesOn(Interval interval){
-        return "";
+    @Override
+    public String toString() {
+        String carriageReturn = "\n";
+        String header = "---> Event <---";
+        String isOpeningLine = isOpening() ? "-> opening" : "-> not opening";
+        String isRecurringLine = isRecurring() ? "-> recurring" : "-> not recurring";
+        String startLine = "-> start [" + getInterval().getStart().toString() + "]";
+        String endLine = "-> end   [" + getInterval().getEnd().toString() + "]";
+
+        return header + carriageReturn +
+                isOpeningLine + carriageReturn +
+                isRecurringLine + carriageReturn +
+                startLine + carriageReturn +
+                endLine + carriageReturn;
     }
 }
 
@@ -66,7 +77,7 @@ class EventFactory {
     static Event RecurringOpeningEvent(Date startDate, Date endDate) {
         return new Event.Builder()
                 .withOpening(true)
-                .withRecuring(true)
+                .withRecurring(true)
                 .withStartDate(startDate)
                 .withEndDate(endDate)
                 .build();
@@ -75,7 +86,7 @@ class EventFactory {
     static Event NonRecurringOpeningEvent(Date startDate, Date endDate) {
         return new Event.Builder()
                 .withOpening(true)
-                .withRecuring(false)
+                .withRecurring(false)
                 .withStartDate(startDate)
                 .withEndDate(endDate)
                 .build();
@@ -84,7 +95,7 @@ class EventFactory {
     static Event BusyEvent(Date startDate, Date endDate) {
         return new Event.Builder()
                 .withOpening(false)
-                .withRecuring(false)
+                .withRecurring(false)
                 .withStartDate(startDate)
                 .withEndDate(endDate)
                 .build();
