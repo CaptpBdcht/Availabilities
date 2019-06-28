@@ -1,3 +1,6 @@
+import events.Event;
+import interval.Interval;
+import schedule.Schedule;
 import helpers.DateHelper;
 import org.junit.Before;
 import org.junit.BeforeClass;

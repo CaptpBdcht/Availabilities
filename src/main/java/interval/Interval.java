@@ -1,12 +1,14 @@
+package interval;
+
 import helpers.DateHelper;
 
 import java.util.*;
 
-class Interval {
+public class Interval {
     private Date start;
     private Date end;
 
-    Interval(Date start, Date end) {
+    public Interval(Date start, Date end) {
         if (start == null) {
             throw new IllegalArgumentException("start cannot be null");
         }

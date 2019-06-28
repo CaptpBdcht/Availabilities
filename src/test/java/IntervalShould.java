@@ -1,3 +1,4 @@
+import interval.Interval;
 import helpers.DateHelper;
 import org.junit.Test;
 
