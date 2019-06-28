@@ -1,13 +1,12 @@
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 
-public class Event {
+class Event {
     private boolean opening;
     private boolean recurring;
-
     private Interval interval;
 
-    public static class Builder {
+    static class Builder {
         private boolean opening;
         private boolean recurring;
 
@@ -40,13 +39,54 @@ public class Event {
         }
     }
 
-    Event(boolean opening, boolean recurring, Interval interval) {
+    private Event(boolean opening, boolean recurring, Interval interval) {
         this.opening = opening;
         this.recurring = recurring;
         this.interval = interval;
     }
 
+    public boolean isOpening() {
+        return opening;
+    }
+
+    public boolean isRecurring() {
+        return recurring;
+    }
+
+    public Interval getInterval() {
+        return interval;
+    }
+
     static String availabilitiesOn(Interval interval){
         return "";
+    }
+}
+
+class EventFactory {
+    static Event RecurringOpeningEvent(Date startDate, Date endDate) {
+        return new Event.Builder()
+                .withOpening(true)
+                .withRecuring(true)
+                .withStartDate(startDate)
+                .withEndDate(endDate)
+                .build();
+    }
+
+    static Event NonRecurringOpeningEvent(Date startDate, Date endDate) {
+        return new Event.Builder()
+                .withOpening(true)
+                .withRecuring(false)
+                .withStartDate(startDate)
+                .withEndDate(endDate)
+                .build();
+    }
+
+    static Event BusyEvent(Date startDate, Date endDate) {
+        return new Event.Builder()
+                .withOpening(false)
+                .withRecuring(false)
+                .withStartDate(startDate)
+                .withEndDate(endDate)
+                .build();
     }
 }

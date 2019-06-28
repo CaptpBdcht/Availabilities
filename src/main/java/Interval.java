@@ -27,7 +27,5 @@ class Interval {
         return start;
     }
 
-    Date getEnd() {
-        return end;
-    }
+    Date getEnd() { return end; }
 }
