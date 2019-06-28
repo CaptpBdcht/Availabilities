@@ -1,3 +1,5 @@
+import helpers.DateHelper;
+
 import java.util.*;
 
 class Interval {
@@ -32,8 +34,8 @@ class Interval {
     }
 
     static boolean doesIntersect(Interval first, Interval second) {
-        return !DateUtil.after(second.getStart(), first.getEnd())
-            && !DateUtil.after(first.getStart(), second.getEnd());
+        return !DateHelper.after(second.getStart(), first.getEnd())
+            && !DateHelper.after(first.getStart(), second.getEnd());
     }
 
     static Interval intersection(Interval first, Interval second) {
@@ -42,12 +44,12 @@ class Interval {
         Date secondStart = second.getStart();
         Date secondEnd = second.getEnd();
 
-        if (DateUtil.after(secondStart, firstEnd) || DateUtil.after(firstStart, secondEnd)) {
+        if (DateHelper.after(secondStart, firstEnd) || DateHelper.after(firstStart, secondEnd)) {
             return null;
         }
 
-        Date start = DateUtil.max(firstStart, secondStart);
-        Date end = DateUtil.min(firstEnd, secondEnd);
+        Date start = DateHelper.max(firstStart, secondStart);
+        Date end = DateHelper.min(firstEnd, secondEnd);
         return new Interval(start, end);
     }
 
@@ -58,12 +60,12 @@ class Interval {
             return Collections.singletonList(first);
         }
         // intersects inside left
-        if (DateUtil.equals(intersection.getStart(), first.getStart())) {
+        if (DateHelper.equals(intersection.getStart(), first.getStart())) {
             Interval newInterval = new Interval(intersection.getEnd(), first.getEnd());
             return Collections.singletonList(newInterval);
         }
         // intersects inside right
-        if (DateUtil.equals(intersection.getEnd(), first.getEnd())) {
+        if (DateHelper.equals(intersection.getEnd(), first.getEnd())) {
             Interval newInterval = new Interval(first.getStart(), intersection.getStart());
             return Collections.singletonList(newInterval);
         }
@@ -74,30 +76,3 @@ class Interval {
     }
 }
 
-class DateUtil {
-    static Date max(Date d1, Date d2) {
-        if (d1.compareTo(d2) < 0) {
-            return d2;
-        }
-        return d1;
-    }
-
-    static Date min(Date d1, Date d2) {
-        if (d1.compareTo(d2) < 0) {
-            return d1;
-        }
-        return d2;
-    }
-
-    static boolean before(Date d1, Date d2) {
-        return d1.compareTo(d2) < 0;
-    }
-
-    static boolean after(Date d1, Date d2) {
-        return d1.compareTo(d2) > 0;
-    }
-
-    static boolean equals(Date d1, Date d2) {
-        return d1.compareTo(d2) == 0;
-    }
-}

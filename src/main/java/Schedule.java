@@ -11,7 +11,7 @@ class Schedule {
         events.add(event);
     }
 
-    String availabilitiesOn(Interval askedInterval) {
-        return "";
+    List<Interval> availabilitiesOn(Interval askedInterval) {
+        return new ArrayList<>();
     }
 }

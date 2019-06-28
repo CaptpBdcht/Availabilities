@@ -1,11 +1,14 @@
+import helpers.DateHelper;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class Content {
 
     public static void main(String[] args) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("y M D H m");
+        SimpleDateFormat format = DateHelper.getSimpleDateFormat();
 
         Event recurringOpeningEvent = EventFactory.RecurringOpeningEvent(
                 format.parse("2016 7 1 10 30"), // July 1st, 10:30
@@ -30,7 +33,7 @@ public class Content {
         schedule.addEvent(recurringOpeningEvent);
         schedule.addEvent(openingEvent);
         schedule.addEvent(interventionEvent);
-        String answer = schedule.availabilitiesOn(askedInterval);
+        List<Interval> answer = schedule.availabilitiesOn(askedInterval);
 
         /*
          * Answer should be :

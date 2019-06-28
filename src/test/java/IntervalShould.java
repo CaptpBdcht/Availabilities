@@ -1,3 +1,4 @@
+import helpers.DateHelper;
 import org.junit.Test;
 
 import java.text.ParseException;
@@ -8,7 +9,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class IntervalShould {
-    private final SimpleDateFormat format = new SimpleDateFormat("y M D H m");
+    private final SimpleDateFormat format = DateHelper.getSimpleDateFormat();
     private final Date seventhFebruaryAtSix = format.parse("2016 7 2 6 00");
     private final Date seventhFebruaryAtTen = format.parse("2016 7 2 10 00");
     private final Date seventhFebruaryAtTwelve = format.parse("2016 7 2 12 00");

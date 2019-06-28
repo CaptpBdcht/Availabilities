@@ -1,27 +1,38 @@
+import helpers.DateHelper;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 public class ScheduleShould {
-    private final static SimpleDateFormat format = new SimpleDateFormat("y M D H m");
-    private final String seventhJanuaryAtTenThirty = "2016 7 1 10 30"; // July 1st 10:30
-    private final String seventhJanuaryAtFourteen = "2016 7 1 14 00";  // July 1st 14:00
-    private final String seventhJanuaryAtFifteen = "2016 7 1 15 00";   // July 1st 15:00
+    private static SimpleDateFormat format = DateHelper.getSimpleDateFormat();
+    private static Interval askedInterval;
+
+    private static final String seventhJanuaryAtTen = "2016 7 1 10 00";
+    private static final String seventhMarchAtTen = "2016 7 3 10 00";
+
+    // private final Date seventhFebruaryAtSix = format.parse("2016 7 2 6 00");
+    private final Date seventhFebruaryAtTen = format.parse("2016 7 2 10 00");
+    // private final Date seventhFebruaryAtTwelve = format.parse("2016 7 2 12 00");
+    private final Date seventhFebruaryAtFourteen = format.parse("2016 7 2 14 00");
+    // private final Date seventhFebruaryAtSeventeen = format.parse("2016 7 2 17 00");
 
     private Schedule schedule;
 
-    private static Interval askedInterval;
+    public ScheduleShould() throws ParseException {
+    }
 
     @BeforeClass
     public static void onlyOnce() throws ParseException {
-        Date intervalStart = format.parse("2016 7 4 10 00"); // July 4th 10:00
-        Date intervalEnd = format.parse("2016 7 10 10 00");  // July 10th 10:00
+        Date intervalStart = format.parse(seventhJanuaryAtTen);
+        Date intervalEnd = format.parse(seventhMarchAtTen);
         askedInterval = new Interval(intervalStart, intervalEnd);
     }
 
@@ -31,22 +42,22 @@ public class ScheduleShould {
     }
 
     @Test()
-    public void add_new_events() throws ParseException {
+    public void add_new_events() {
         Event event = EventFactory.RecurringOpeningEvent(
-                format.parse(seventhJanuaryAtTenThirty),
-                format.parse(seventhJanuaryAtFourteen)
+            seventhFebruaryAtTen,
+            seventhFebruaryAtFourteen
         );
         schedule.addEvent(event);
     }
 
     @Test()
-    public void get_availabilities_when_free_on_a_simple_hour() throws ParseException {
+    public void get_availabilities_when_free_on_one_interval() {
         Event openingEvent = EventFactory.NonRecurringOpeningEvent(
-                format.parse(seventhJanuaryAtFourteen),
-                format.parse(seventhJanuaryAtFifteen)
+            seventhFebruaryAtTen,
+            seventhFebruaryAtFourteen
         );
         schedule.addEvent(openingEvent);
-        String availabilities = schedule.availabilitiesOn(askedInterval);
-        assertEquals(availabilities, "");
+        List<Interval> availabilities = schedule.availabilitiesOn(askedInterval);
+        assertEquals(availabilities, Collections.emptyList());
     }
 }
