@@ -51,20 +51,20 @@ class Interval {
         return new Interval(start, end);
     }
 
-    static List<Interval> disjunctiveUnion(Interval first, Interval second) {
+    static List<Interval> leftDisjunctiveUnion(Interval first, Interval second) {
         Interval intersection = Interval.intersection(first, second);
         // no intersection
         if (intersection == null) {
             return Collections.singletonList(first);
         }
-        // intersects on right
-        if (DateUtil.equals(intersection.getEnd(), first.getEnd())) {
-            Interval newInterval = new Interval(first.getStart(), intersection.getStart());
-            return Collections.singletonList(newInterval);
-        }
-        // intersects on left
+        // intersects inside left
         if (DateUtil.equals(intersection.getStart(), first.getStart())) {
             Interval newInterval = new Interval(intersection.getEnd(), first.getEnd());
+            return Collections.singletonList(newInterval);
+        }
+        // intersects inside right
+        if (DateUtil.equals(intersection.getEnd(), first.getEnd())) {
+            Interval newInterval = new Interval(first.getStart(), intersection.getStart());
             return Collections.singletonList(newInterval);
         }
         // intersects in middle
