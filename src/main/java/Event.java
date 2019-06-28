@@ -1,44 +1,52 @@
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Event {
     private boolean opening;
     private boolean recurring;
-    private Date date;
-    private Date endDate;
 
-    Event(boolean opening, boolean recurring, Date date, Date endDate) {
-        super();
+    private Interval interval;
+
+    public static class Builder {
+        private boolean opening;
+        private boolean recurring;
+
+        private Date startDate;
+        private Date endDate;
+
+        Builder withOpening(boolean opening) {
+            this.opening = opening;
+            return this;
+        }
+
+        Builder withRecuring(boolean recurring) {
+            this.recurring = recurring;
+            return this;
+        }
+
+        Builder withStartDate(Date start) {
+            this.startDate = start;
+            return this;
+        }
+
+        Builder withEndDate(Date end) {
+            this.endDate = end;
+            return this;
+        }
+
+        Event build() {
+            Interval interval = new Interval(startDate, endDate);
+            return new Event(opening, recurring, interval);
+        }
+    }
+
+    Event(boolean opening, boolean recurring, Interval interval) {
         this.opening = opening;
         this.recurring = recurring;
-        this.date = date;
-        this.endDate = endDate;
+        this.interval = interval;
     }
 
-    public boolean isOpening(){
-        return opening;
-    }
-
-    public boolean isBusy(){
-        return !opening;
-    }
-
-    public boolean isRecurring(){
-        return recurring;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    static String availabilities(Date fromDate, Date toDate){
+    static String availabilitiesOn(Interval interval){
         return "";
     }
 }

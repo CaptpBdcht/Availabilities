@@ -1,5 +1,3 @@
-import exceptions.DatesDescendingException;
-
 import java.util.Date;
 
 class Interval {
@@ -14,21 +12,22 @@ class Interval {
             throw new IllegalArgumentException("end cannot be null");
         }
         if (end.compareTo(start) < 0) {
-            throw new DatesDescendingException("end cannot be before start");
+            throw new IllegalArgumentException("end cannot be before start");
         }
         if (end.compareTo(start) == 0) {
             throw new IllegalArgumentException("start cannot equal end");
         }
 
-        this.start = new Date(start.getTime());
-        this.end = new Date(end.getTime());
+        // Immutable since Java 8, shouldn't copy to protect
+        this.start = start;
+        this.end = end;
     }
 
-    public Date getStart() {
+    Date getStart() {
         return start;
     }
 
-    public Date getEnd() {
+    Date getEnd() {
         return end;
     }
 }

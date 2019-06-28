@@ -13,7 +13,8 @@ public class EventShould {
         SimpleDateFormat format = new SimpleDateFormat("y M D H m");
         Date start = format.parse("2016 7 1 10 30"); // July 1st, 10:30
         Date end = format.parse("2016 7 1 14 00"); // July 1st, 14:00
-        Event event = new Event(false, false, start, end);
+        Interval interval = new Interval(start, end);
+        Event event = new Event(false, false, interval);
         assertNotNull("Verify event is NOT null", event);
     }
 }

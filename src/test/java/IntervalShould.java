@@ -1,4 +1,3 @@
-import exceptions.DatesDescendingException;
 import org.junit.Test;
 
 import java.text.ParseException;
@@ -25,7 +24,7 @@ public class IntervalShould {
         Interval it = new Interval(startDate, null);
     }
 
-    @Test(expected = DatesDescendingException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void not_create_if_start_after_end() throws ParseException {
         startDate = format.parse(seventhJanuaryAtFourteen);
         endDate = format.parse(seventhJanuaryAtTenThirty);
