@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -57,7 +56,15 @@ public class ScheduleShould {
             seventhFebruaryAtFourteen
         );
         schedule.addEvent(openingEvent);
+
+        Interval expectedAvailability = new Interval(
+            seventhFebruaryAtTen,
+            seventhFebruaryAtFourteen
+        );
+
         List<Interval> availabilities = schedule.availabilitiesOn(askedInterval);
-        assertEquals(availabilities, Collections.emptyList());
+        assertEquals(availabilities.size(), 1);
+        assertEquals(availabilities.get(0).getStart(), expectedAvailability.getStart());
+        assertEquals(availabilities.get(0).getEnd(), expectedAvailability.getEnd());
     }
 }
