@@ -1,4 +1,7 @@
+package schedule;
+
 import events.Event;
+import events.NonRecurringOpeningEvent;
 import interval.Interval;
 import schedule.Schedule;
 import helpers.DateHelper;
@@ -45,7 +48,7 @@ public class ScheduleShould {
 
     @Test()
     public void add_new_events() {
-        Event event = EventFactory.RecurringOpeningEvent(
+        Event event = new NonRecurringOpeningEvent(
             seventhFebruaryAtTen,
             seventhFebruaryAtFourteen
         );
@@ -54,7 +57,7 @@ public class ScheduleShould {
 
     @Test()
     public void get_availabilities_when_free_on_one_interval() {
-        Event openingEvent = EventFactory.NonRecurringOpeningEvent(
+        Event openingEvent = new NonRecurringOpeningEvent(
             seventhFebruaryAtTen,
             seventhFebruaryAtFourteen
         );

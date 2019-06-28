@@ -27,20 +27,20 @@ public class Interval {
         this.end = end;
     }
 
-    Date getStart() {
+    public Date getStart() {
         return start;
     }
 
-    Date getEnd() {
+    public Date getEnd() {
         return end;
     }
 
-    static boolean doesIntersect(Interval first, Interval second) {
+    public static boolean doesIntersect(Interval first, Interval second) {
         return !DateHelper.after(second.getStart(), first.getEnd())
             && !DateHelper.after(first.getStart(), second.getEnd());
     }
 
-    static Interval intersection(Interval first, Interval second) {
+    public static Interval intersection(Interval first, Interval second) {
         Date firstStart = first.getStart();
         Date firstEnd = first.getEnd();
         Date secondStart = second.getStart();
@@ -55,7 +55,7 @@ public class Interval {
         return new Interval(start, end);
     }
 
-    static List<Interval> leftDisjunctiveUnion(Interval first, Interval second) {
+    public static List<Interval> leftDisjunctiveUnion(Interval first, Interval second) {
         Interval intersection = Interval.intersection(first, second);
         // no intersection
         if (intersection == null) {
