@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class IntervalShould {
     private final Date seventhFebruaryAtTwelve = format.parse("2016 7 2 12 00");
     private final Date seventhFebruaryAtFourteen = format.parse("2016 7 2 14 00");
     private final Date seventhFebruaryAtSeventeen = format.parse("2016 7 2 17 00");
+    private final Date seventhFebruaryAtTwenty = format.parse("2016 7 2 20 00");
 
     public IntervalShould() throws ParseException {
     }
@@ -95,7 +97,7 @@ public class IntervalShould {
             seventhFebruaryAtFourteen,
             seventhFebruaryAtSeventeen
         );
-        assertNull(Interval.intersection(first, second));
+        assertNull(Interval.intersect(first, second));
     }
 
     @Test()
@@ -105,7 +107,8 @@ public class IntervalShould {
             seventhFebruaryAtTen,
             seventhFebruaryAtTwelve
         );
-        Interval intersection = Interval.intersection(first, first);
+
+        Interval intersection = Interval.intersect(first, first);
         if (intersection != null) {
             assertEquals(intersection.getStart(), first.getStart());
             assertEquals(intersection.getEnd(), first.getEnd());
@@ -127,7 +130,8 @@ public class IntervalShould {
             seventhFebruaryAtTen,
             seventhFebruaryAtTwelve
         );
-        Interval intersection = Interval.intersection(first, left);
+
+        Interval intersection = Interval.intersect(first, left);
         if (intersection != null) {
             assertEquals(intersection.getStart(), expected.getStart());
             assertEquals(intersection.getEnd(), expected.getEnd());
@@ -149,7 +153,8 @@ public class IntervalShould {
             seventhFebruaryAtTwelve,
             seventhFebruaryAtFourteen
         );
-        Interval intersection = Interval.intersection(first, right);
+
+        Interval intersection = Interval.intersect(first, right);
         if (intersection != null) {
             assertEquals(intersection.getStart(), expected.getStart());
             assertEquals(intersection.getEnd(), expected.getEnd());
@@ -167,7 +172,8 @@ public class IntervalShould {
             seventhFebruaryAtTen,
             seventhFebruaryAtFourteen
         );
-        Interval intersection = Interval.intersection(first, inside);
+
+        Interval intersection = Interval.intersect(first, inside);
         if (intersection != null) {
             assertEquals(intersection.getStart(), inside.getStart());
             assertEquals(intersection.getEnd(), inside.getEnd());
@@ -185,6 +191,7 @@ public class IntervalShould {
             seventhFebruaryAtFourteen,
             seventhFebruaryAtSeventeen
         );
+
         List<Interval> intervals = Interval.leftDisjunctiveUnion(first, second);
         assertEquals(intervals.size(), 1);
         assertEquals(intervals.get(0).getStart(), seventhFebruaryAtSix);
@@ -206,6 +213,7 @@ public class IntervalShould {
             seventhFebruaryAtTwelve,
             seventhFebruaryAtFourteen
         );
+
         List<Interval> intervals = Interval.leftDisjunctiveUnion(first, left);
         assertEquals(intervals.size(), 1);
         assertEquals(intervals.get(0).getStart(), expected.getStart());
@@ -227,6 +235,7 @@ public class IntervalShould {
             seventhFebruaryAtTen,
             seventhFebruaryAtTwelve
         );
+
         List<Interval> intervals = Interval.leftDisjunctiveUnion(first, right);
         assertEquals(intervals.size(), 1);
         assertEquals(intervals.get(0).getStart(), expected.getStart());
@@ -252,11 +261,184 @@ public class IntervalShould {
             seventhFebruaryAtFourteen,
             seventhFebruaryAtSeventeen
         );
+
         List<Interval> intervals = Interval.leftDisjunctiveUnion(first, right);
         assertEquals(intervals.size(), 2);
         assertEquals(intervals.get(0).getStart(), firstExpected.getStart());
         assertEquals(intervals.get(0).getEnd(), firstExpected.getEnd());
         assertEquals(intervals.get(1).getStart(), secondExpected.getStart());
         assertEquals(intervals.get(1).getEnd(), secondExpected.getEnd());
+    }
+
+    @Test()
+    public void
+    remove_interval_list_from_interval_disjoint_left() {
+        Interval first = new Interval(
+            seventhFebruaryAtSix,
+            seventhFebruaryAtTen
+        );
+        Interval second = new Interval(
+            seventhFebruaryAtTen,
+            seventhFebruaryAtTwelve
+        );
+        Interval interval = new Interval(
+            seventhFebruaryAtFourteen,
+            seventhFebruaryAtSeventeen
+        );
+        List<Interval> intervals = Arrays.asList(first, second);
+
+        List<Interval> result = Interval.leftDisjunctiveUnionList(interval, intervals);
+        assertEquals(result.size(), 1);
+        assertEquals(result.get(0).getStart(), interval.getStart());
+        assertEquals(result.get(0).getEnd(), interval.getEnd());
+    }
+
+    @Test()
+    public void
+    remove_interval_list_from_interval_disjoint_right() {
+        Interval interval = new Interval(
+            seventhFebruaryAtSix,
+            seventhFebruaryAtTen
+        );
+        Interval first = new Interval(
+            seventhFebruaryAtTwelve,
+            seventhFebruaryAtFourteen
+        );
+        Interval second = new Interval(
+            seventhFebruaryAtFourteen,
+            seventhFebruaryAtSeventeen
+        );
+        List<Interval> intervals = Arrays.asList(first, second);
+
+        List<Interval> result = Interval.leftDisjunctiveUnionList(interval, intervals);
+        assertEquals(result.size(), 1);
+        assertEquals(result.get(0).getStart(), interval.getStart());
+        assertEquals(result.get(0).getEnd(), interval.getEnd());
+    }
+
+    @Test()
+    public void
+    remove_interval_list_from_interval_disjoint_inside() {
+        Interval interval = new Interval(
+            seventhFebruaryAtSix,
+            seventhFebruaryAtTwenty
+        );
+        Interval first = new Interval(
+            seventhFebruaryAtTen,
+            seventhFebruaryAtTwelve
+        );
+        Interval second = new Interval(
+            seventhFebruaryAtFourteen,
+            seventhFebruaryAtSeventeen
+        );
+        Interval expectedFirst = new Interval(
+            seventhFebruaryAtSix,
+            seventhFebruaryAtTen
+        );
+        Interval expectedSecond = new Interval(
+            seventhFebruaryAtTwelve,
+            seventhFebruaryAtFourteen
+        );
+        Interval expectedThird = new Interval(
+            seventhFebruaryAtSeventeen,
+            seventhFebruaryAtTwenty
+        );
+        List<Interval> intervals = Arrays.asList(first, second);
+
+        List<Interval> result = Interval.leftDisjunctiveUnionList(interval, intervals);
+        assertEquals(result.size(), 3);
+        assertEquals(result.get(0).getStart(), expectedFirst.getStart());
+        assertEquals(result.get(0).getEnd(), expectedFirst.getEnd());
+        assertEquals(result.get(1).getStart(), expectedSecond.getStart());
+        assertEquals(result.get(1).getEnd(), expectedSecond.getEnd());
+        assertEquals(result.get(2).getStart(), expectedThird.getStart());
+        assertEquals(result.get(2).getEnd(), expectedThird.getEnd());
+    }
+
+    @Test()
+    public void
+    intersect_lists_disjoint_on_left() {
+        Interval first = new Interval(
+            seventhFebruaryAtSix,
+            seventhFebruaryAtTen
+        );
+        Interval second = new Interval(
+            seventhFebruaryAtTen,
+            seventhFebruaryAtTwelve
+        );
+        Interval third = new Interval(
+            seventhFebruaryAtTwelve,
+            seventhFebruaryAtFourteen
+        );
+        Interval fourth = new Interval(
+            seventhFebruaryAtFourteen,
+            seventhFebruaryAtSeventeen
+        );
+        List<Interval> left = Arrays.asList(first, second);
+        List<Interval> right = Arrays.asList(third, fourth);
+
+        List<Interval> intersections = Interval.intersectList(left, right);
+        assertEquals(intersections.size(), 0);
+    }
+
+    @Test()
+    public void
+    intersect_lists_disjoint_on_right() {
+        Interval first = new Interval(
+            seventhFebruaryAtSix,
+            seventhFebruaryAtTen
+        );
+        Interval second = new Interval(
+            seventhFebruaryAtTen,
+            seventhFebruaryAtTwelve
+        );
+        Interval third = new Interval(
+            seventhFebruaryAtTwelve,
+            seventhFebruaryAtFourteen
+        );
+        Interval fourth = new Interval(
+            seventhFebruaryAtFourteen,
+            seventhFebruaryAtSeventeen
+        );
+        List<Interval> left = Arrays.asList(first, second);
+        List<Interval> right = Arrays.asList(third, fourth);
+
+        List<Interval> intersections = Interval.intersectList(right, left);
+        assertEquals(intersections.size(), 0);
+    }
+
+    @Test()
+    public void
+    intersect_lists() {
+        Interval sixTwelve = new Interval(
+            seventhFebruaryAtSix,
+            seventhFebruaryAtTwelve
+        );
+        Interval fourteenTwenty = new Interval(
+            seventhFebruaryAtFourteen,
+            seventhFebruaryAtTwenty
+        );
+        Interval tenFourteen = new Interval(
+            seventhFebruaryAtTen,
+            seventhFebruaryAtFourteen
+        );
+        Interval seventeenTwenty = new Interval(
+            seventhFebruaryAtSeventeen,
+            seventhFebruaryAtTwenty
+        );
+        List<Interval> first = Arrays.asList(sixTwelve, fourteenTwenty);
+        List<Interval> second = Arrays.asList(tenFourteen, seventeenTwenty);
+
+        Interval tenTwelve = new Interval(
+            seventhFebruaryAtTen,
+            seventhFebruaryAtTwelve
+        );
+
+        List<Interval> intersections = Interval.intersectList(first, second);
+        assertEquals(intersections.size(), 2);
+        assertEquals(intersections.get(0).getStart(), tenTwelve.getStart());
+        assertEquals(intersections.get(0).getEnd(), tenTwelve.getEnd());
+        assertEquals(intersections.get(1).getStart(), seventeenTwenty.getStart());
+        assertEquals(intersections.get(1).getEnd(), seventeenTwenty.getEnd());
     }
 }

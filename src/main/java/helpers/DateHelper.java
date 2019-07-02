@@ -29,6 +29,10 @@ public class DateHelper {
         return d1.compareTo(d2) < 0;
     }
 
+    public static boolean beforeOrEquals(Date d1, Date d2) {
+        return d1.compareTo(d2) <= 0;
+    }
+
     public static boolean after(Date d1, Date d2) {
         return d1.compareTo(d2) > 0;
     }

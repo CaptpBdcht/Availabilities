@@ -2,10 +2,7 @@ package interval;
 
 import helpers.DateHelper;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Interval {
     private Date start;
@@ -38,18 +35,19 @@ public class Interval {
         return end;
     }
 
-    public static boolean doesIntersect(Interval first, Interval second) {
+    static boolean doesIntersect(Interval first, Interval second) {
         return !DateHelper.after(second.getStart(), first.getEnd())
             && !DateHelper.after(first.getStart(), second.getEnd());
     }
 
-    public static Interval intersection(Interval first, Interval second) {
+    static Interval intersect(Interval first, Interval second) {
         Date firstStart = first.getStart();
         Date firstEnd = first.getEnd();
         Date secondStart = second.getStart();
         Date secondEnd = second.getEnd();
 
-        if (DateHelper.after(secondStart, firstEnd) || DateHelper.after(firstStart, secondEnd)) {
+        if (DateHelper.beforeOrEquals(firstEnd, secondStart) ||
+            DateHelper.beforeOrEquals(secondEnd, firstStart)) {
             return null;
         }
 
@@ -58,9 +56,47 @@ public class Interval {
         return new Interval(start, end);
     }
 
-    public static List<Interval> leftDisjunctiveUnion(Interval first, Interval second) {
-        Interval intersection = Interval.intersection(first, second);
-        // no intersection
+    static List<Interval> intersectList(List<Interval> left, List<Interval> right) {
+        Date leftStart = left.get(0).getStart();
+        Date leftEnd = left.get(left.size() - 1).getEnd();
+        Date rightStart = right.get(right.size() - 1).getStart();
+        Date rightEnd = right.get(right.size() - 1).getEnd();
+
+        if (DateHelper.beforeOrEquals(leftEnd, rightStart)) {
+            return Collections.emptyList();
+        }
+        if (DateHelper.beforeOrEquals(rightEnd, leftStart)) {
+            return Collections.emptyList();
+        }
+
+        List<Interval> intersections = new ArrayList<>();
+        for (int i = 0, j = 0; i < left.size() && j < right.size();) {
+            Interval intersect = Interval.intersect(left.get(i), right.get(j));
+            if (intersect != null) {
+                intersections.add(intersect);
+            }
+
+            // right goes further
+            if (DateHelper.before(left.get(i).getEnd(), right.get(j).getEnd())) {
+                i += 1;
+            }
+            // left goes further
+            else if (DateHelper.after(left.get(i).getEnd(), right.get(j).getEnd())) {
+                j += 1;
+            }
+            // right ends at left
+            else {
+                i += 1;
+                j += 1;
+            }
+        }
+
+        return right;
+    }
+
+    static List<Interval> leftDisjunctiveUnion(Interval first, Interval second) {
+        Interval intersection = Interval.intersect(first, second);
+        // no intersect
         if (intersection == null) {
             return Collections.singletonList(first);
         }
@@ -78,6 +114,34 @@ public class Interval {
         Interval firstInterval = new Interval(first.getStart(), intersection.getStart());
         Interval secondInterval = new Interval(intersection.getEnd(), first.getEnd());
         return Arrays.asList(firstInterval, secondInterval);
+    }
+
+    static List<Interval> leftDisjunctiveUnionList(Interval interval, List<Interval> intervals) {
+        Date beginOfIntervals = intervals.get(0).getStart();
+        Date endOfIntervals = intervals.get(intervals.size() - 1).getEnd();
+
+        if (DateHelper.before(interval.getEnd(), beginOfIntervals)) {
+            return Collections.singletonList(interval);
+        }
+        if (DateHelper.before(endOfIntervals, interval.getStart())) {
+            return Collections.singletonList(interval);
+        }
+
+        List<Interval> disjunctiveUnion = new ArrayList<>();
+        if (DateHelper.before(interval.getStart(), beginOfIntervals)) {
+            Interval remainingLeft = new Interval(interval.getStart(), beginOfIntervals);
+            disjunctiveUnion.add(remainingLeft);
+        }
+        for (int i = 0; i < intervals.size() - 1; i++) {
+            Interval betweenNext = new Interval(intervals.get(i).getEnd(), intervals.get(i + 1).getStart());
+            Interval intersectionWithReference = Interval.intersect(interval, betweenNext);
+            disjunctiveUnion.add(intersectionWithReference);
+        }
+        if (DateHelper.before(endOfIntervals, interval.getEnd())) {
+            Interval remainingRight = new Interval(endOfIntervals, interval.getEnd());
+            disjunctiveUnion.add(remainingRight);
+        }
+        return disjunctiveUnion;
     }
 }
 
