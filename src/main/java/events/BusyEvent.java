@@ -4,9 +4,9 @@ import interval.Interval;
 
 import java.util.Date;
 
-class BusyEvent extends Event implements Opening {
+public class BusyEvent extends Event implements Opening {
 
-    BusyEvent(Date startDate, Date endDate) {
+    public BusyEvent(Date startDate, Date endDate) {
         this.interval = new Interval(startDate, endDate);
     }
 

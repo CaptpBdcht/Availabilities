@@ -56,7 +56,7 @@ public class Interval {
         return new Interval(start, end);
     }
 
-    static List<Interval> intersectList(List<Interval> left, List<Interval> right) {
+    public static List<Interval> intersectList(List<Interval> left, List<Interval> right) {
         Date leftStart = left.get(0).getStart();
         Date leftEnd = left.get(left.size() - 1).getEnd();
         Date rightStart = right.get(right.size() - 1).getStart();
@@ -90,8 +90,7 @@ public class Interval {
                 j += 1;
             }
         }
-
-        return right;
+        return intersections;
     }
 
     static List<Interval> leftDisjunctiveUnion(Interval first, Interval second) {
@@ -116,7 +115,7 @@ public class Interval {
         return Arrays.asList(firstInterval, secondInterval);
     }
 
-    static List<Interval> leftDisjunctiveUnionList(Interval interval, List<Interval> intervals) {
+    public static List<Interval> leftDisjunctiveUnionList(Interval interval, List<Interval> intervals) {
         Date beginOfIntervals = intervals.get(0).getStart();
         Date endOfIntervals = intervals.get(intervals.size() - 1).getEnd();
 

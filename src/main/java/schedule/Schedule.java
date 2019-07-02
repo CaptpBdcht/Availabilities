@@ -1,10 +1,15 @@
 package schedule;
 
+import events.BusyEvent;
 import events.Event;
+import events.NonRecurringOpeningEvent;
 import interval.Interval;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Schedule {
     private final List<Event> events = new ArrayList<>();
@@ -17,10 +22,32 @@ public class Schedule {
     }
 
     public List<Interval> availabilitiesOn(Interval askedInterval) {
-        events.stream()
+        boolean hasOpening = events.stream()
             .filter(Event::isOpening)
-            .forEach(System.out::println);
+            .anyMatch(e -> true);
 
-        return new ArrayList<>();
+        if (!hasOpening) {
+            return Collections.emptyList();
+        }
+
+        List<Interval> nonRecurringOpeningEvents = events.stream()
+            .filter(e -> e.getClass() == NonRecurringOpeningEvent.class)
+            .map(Event::getInterval)
+            .collect(Collectors.toList());
+
+        List<Interval> busyEvents = events.stream()
+            .filter(e -> e.getClass() == BusyEvent.class)
+            .map(Event::getInterval)
+            .collect(Collectors.toList());
+
+        List<Interval> askedLessBusy = Interval.leftDisjunctiveUnionList(
+            askedInterval, busyEvents
+        );
+
+        List<Interval> availabilities = Interval.intersectList(
+            askedLessBusy, nonRecurringOpeningEvents
+        );
+
+        return availabilities;
     }
 }
