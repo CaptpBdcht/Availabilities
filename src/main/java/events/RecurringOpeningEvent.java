@@ -4,9 +4,9 @@ import interval.Interval;
 
 import java.util.Date;
 
-class RecurringOpeningEvent extends Event implements Recurring {
+public class RecurringOpeningEvent extends Event implements Recurring {
 
-    RecurringOpeningEvent(Date startDate, Date endDate) {
+    public RecurringOpeningEvent(Date startDate, Date endDate) {
         this.interval = new Interval(startDate, endDate);
     }
 

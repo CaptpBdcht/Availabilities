@@ -2,13 +2,14 @@ package helpers;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class DateHelper {
 
     private static final String DateFormatString = "y M D H m";
 
     public static SimpleDateFormat getSimpleDateFormat() {
-        return new SimpleDateFormat(DateHelper.DateFormatString);
+        return new SimpleDateFormat(DateHelper.DateFormatString, Locale.ENGLISH);
     }
 
     public static Date max(Date d1, Date d2) {

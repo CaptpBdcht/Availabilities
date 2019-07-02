@@ -57,6 +57,10 @@ public class Interval {
     }
 
     public static List<Interval> intersectList(List<Interval> left, List<Interval> right) {
+        if (left.isEmpty() || right.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         Date leftStart = left.get(0).getStart();
         Date leftEnd = left.get(left.size() - 1).getEnd();
         Date rightStart = right.get(right.size() - 1).getStart();

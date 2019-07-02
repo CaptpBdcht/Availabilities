@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Schedule {
+
     private final List<Event> events = new ArrayList<>();
 
     public void addEvent(Event event) {
@@ -44,10 +45,8 @@ public class Schedule {
             askedInterval, busyEvents
         );
 
-        List<Interval> availabilities = Interval.intersectList(
+        return Interval.intersectList(
             askedLessBusy, nonRecurringOpeningEvents
         );
-
-        return availabilities;
     }
 }

@@ -3,6 +3,7 @@ package schedule;
 import events.BusyEvent;
 import events.Event;
 import events.NonRecurringOpeningEvent;
+import events.RecurringOpeningEvent;
 import interval.Interval;
 import helpers.DateHelper;
 import org.junit.Before;
@@ -20,20 +21,22 @@ public class ScheduleShould {
     private static SimpleDateFormat format = DateHelper.getSimpleDateFormat();
     private static Interval askedInterval;
 
-    private static final String seventhJanuaryAtTen = "2016 7 1 10 00";
-    private static final String seventhMarchAtTen = "2016 7 3 10 00";
+    private static final String seventhJanuaryAtTen = "2016 1 7 10 00";
+    private static final String tenthMarchAtTen = "2016 3 10 10 00";
 
-    private final Date seventhFebruaryAtTwo = format.parse("2016 7 2 2 00");
-    private final Date seventhFebruaryAtSix = format.parse("2016 7 2 6 00");
-    private final Date seventhFebruaryAtNine = format.parse("2016 7 2 9 00");
-    private final Date seventhFebruaryAtTen = format.parse("2016 7 2 10 00");
-    private final Date seventhFebruaryAtTwelve = format.parse("2016 7 2 12 00");
-    private final Date seventhFebruaryAtFourteen = format.parse("2016 7 2 14 00");
-    private final Date seventhFebruaryAtSixteen = format.parse("2016 7 2 16 00");
-    private final Date seventhFebruaryAtEighteen = format.parse("2016 7 2 18 00");
-    private final Date seventhFebruaryAtTwenty = format.parse("2016 7 2 20 00");
-    private final Date seventhFebruaryAtTwentyTwo = format.parse("2016 7 2 22 00");
 
+    private final Date firstFebruaryAtSix = format.parse("2016 2 1 6 00");
+    private final Date firstFebruaryAtTwelve = format.parse("2016 2 1 12 00");
+    private final Date seventhFebruaryAtTwo = format.parse("2016 2 7 2 00");
+    private final Date seventhFebruaryAtSix = format.parse("2016 2 7 6 00");
+    private final Date seventhFebruaryAtNine = format.parse("2016 2 7 9 00");
+    private final Date seventhFebruaryAtTen = format.parse("2016 2 7 10 00");
+    private final Date seventhFebruaryAtTwelve = format.parse("2016 2 7 12 00");
+    private final Date seventhFebruaryAtFourteen = format.parse("2016 2 7 14 00");
+    private final Date seventhFebruaryAtSixteen = format.parse("2016 2 7 16 00");
+    private final Date seventhFebruaryAtEighteen = format.parse("2016 2 7 18 00");
+    private final Date seventhFebruaryAtTwenty = format.parse("2016 2 7 20 00");
+    private final Date seventhFebruaryAtTwentyTwo = format.parse("2016 2 7 22 00");
 
     private Schedule schedule;
 
@@ -43,7 +46,7 @@ public class ScheduleShould {
     @BeforeClass
     public static void onlyOnce() throws ParseException {
         Date intervalStart = format.parse(seventhJanuaryAtTen);
-        Date intervalEnd = format.parse(seventhMarchAtTen);
+        Date intervalEnd = format.parse(tenthMarchAtTen);
         askedInterval = new Interval(intervalStart, intervalEnd);
     }
 
@@ -73,8 +76,7 @@ public class ScheduleShould {
     public void
     consider_non_recurring_opening_events() {
         Interval askedInterval = new Interval(
-            seventhFebruaryAtTwo,
-            seventhFebruaryAtTwenty
+            seventhFebruaryAtTwo, seventhFebruaryAtTwenty
         );
 
         NonRecurringOpeningEvent morningOpening = new NonRecurringOpeningEvent(
@@ -101,8 +103,7 @@ public class ScheduleShould {
     public void
     consider_also_busy_events() {
         Interval askedInterval = new Interval(
-            seventhFebruaryAtTwo,
-            seventhFebruaryAtTwenty
+            seventhFebruaryAtTwo, seventhFebruaryAtTwenty
         );
 
         NonRecurringOpeningEvent morningOpening = new NonRecurringOpeningEvent(
@@ -133,5 +134,32 @@ public class ScheduleShould {
         assertEquals(availabilities.get(0).getEnd(), seventhFebruaryAtTen);
         assertEquals(availabilities.get(1).getStart(), seventhFebruaryAtSixteen);
         assertEquals(availabilities.get(1).getEnd(), seventhFebruaryAtEighteen);
+    }
+
+    @Test()
+    public void
+    consider_also_recurring_opening_events() {
+        Interval askedInterval = new Interval(
+            seventhFebruaryAtTwo, seventhFebruaryAtTwenty
+        );
+
+        RecurringOpeningEvent openingEvent = new RecurringOpeningEvent(
+            firstFebruaryAtSix, firstFebruaryAtTwelve
+        );
+
+        BusyEvent morningBusy = new BusyEvent(
+            seventhFebruaryAtNine, seventhFebruaryAtTen
+        );
+
+        Schedule schedule = new Schedule();
+        schedule.addEvent(openingEvent);
+        schedule.addEvent(morningBusy);
+
+        List<Interval> availabilities = schedule.availabilitiesOn(askedInterval);
+        assertEquals(availabilities.size(), 2);
+        assertEquals(availabilities.get(0).getStart(), seventhFebruaryAtSix);
+        assertEquals(availabilities.get(0).getEnd(), seventhFebruaryAtNine);
+        assertEquals(availabilities.get(1).getStart(), seventhFebruaryAtTen);
+        assertEquals(availabilities.get(1).getEnd(), seventhFebruaryAtTwelve);
     }
 }
